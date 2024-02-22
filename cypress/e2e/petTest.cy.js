@@ -83,4 +83,36 @@ describe('PetStore test suit', () => {
             })
         })
     })
+
+    it('Find pet by status', () => {
+
+        cy.request({
+            method: 'GET',
+            url: `/pet/findByStatus?status=${pet.status}`,
+            body: pet,
+        }).then(response => {
+            expect(response.status).to.be.equal(200);
+
+            const result = response.body.filter((element) => element.id === pet.id);
+            expect(result.length).to.be.equal(1);
+            cy.log(pet.id);
+        })
+    })
+
+   it ('Delete pet', () => {
+
+
+        cy.request({
+            method: 'DELETE',
+            url: `/pet/${petId}`,
+            body: pet
+        }).then(response => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body.code).to.be.equal(200);
+            expect(response.body.message).to.be.equal(`${petId}`);
+            expect(response.body.type).to.be.equal('unknown');
+
+
+        })
+    })
 })
